@@ -2,7 +2,7 @@ const THREE = window.MINDAR.IMAGE.THREE;
 import {loadGLTF, loadAudio} from "./libs/loader.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-	const sgtart = async() => {
+	const start = async() => {
 		const mindarThree = new window.MINDAR.IMAGE.MindARThree({
 			container: document.body,
 			imageTargetSrc: './abc.mind',
@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
 		const airplaneMixer = new THREE.AnimationMixer(airplane.scene);
 		const airplaneAction = airplaneMixer.clipAction(airplane.animations[0]);
 		airplaneAction.play();
-		
 		const airplaneAclip = await loadAudio("./sound/airplane.mp3");
 		const airListener = new THREE.AudioListener();
-		const airplaneAudio = new THREE.PositionalAudio(airListener);
+		const airplaneAudio = new THREE.PositionalAudio(airListener);	
+		
 		
 		const ball = await loadGLTF("./ball/scene.gltf");
 		ball.scene.scale.set(0.2, 0.2, 0.2);
@@ -34,34 +34,34 @@ document.addEventListener('DOMContentLoaded', () => {
 		
 		const ballAclip = await loadAudio("./sound/ball.mp3");
 		const ballListener = new THREE.AudioListener();
-		const ballAudio = new THREE.PositionalAudio(ballListener);
+		const ballAudio = new THREE.PositionalAudio(ballListener);	
 		
 		const car = await loadGLTF("./car/scene.gltf");
 		car.scene.scale.set(0.3, 0.3, 0.3);
 		car.scene.position.set(0, -0.1, 0);
 		
 		const carMixer = new THREE.AnimationMixer(car.scene);
-		const callAction = carMixer.clipAction(car.animations[0]);
+		const carAction = carMixer.clipAction(car.animations[0]);
 		carAction.play();
 		
 		const carAclip = await loadAudio("./sound/car.mp3");
 		const carListener = new THREE.AudioListener();
-		const carAudio = new THREE.PositionalAudio(carListener);
+		const carAudio = new THREE.PositionalAudio(carListener);	
 		
 		const airplaneAnchor = mindarThree.addAnchor(0);
 		airplaneAnchor.group.add(airplane.scene);
-		
 		camera.add(airListener);
 		airplaneAudio.setRefDistance(100);
 		airplaneAudio.setBuffer(airplaneAclip);
 		airplaneAudio.setLoop(true);
-		airplaneAnchor.group.add(airplaneAudio);
+		airplaneAnchor.group.add(airplaneAudio)
 		airplaneAnchor.onTargetFound = () => {
 			airplaneAudio.play();
 		}
 		airplaneAnchor.onTargetLost = () => {
 			airplaneAudio.pause();
 		}
+		
 		
 		const ballAnchor = mindarThree.addAnchor(1);
 		ballAnchor.group.add(ball.scene);
@@ -70,13 +70,14 @@ document.addEventListener('DOMContentLoaded', () => {
 		ballAudio.setRefDistance(100);
 		ballAudio.setBuffer(ballAclip);
 		ballAudio.setLoop(true);
-		ballAnchor.group.add(ballAudio);
+		ballAnchor.group.add(ballAudio)
 		ballAnchor.onTargetFound = () => {
 			ballAudio.play();
 		}
 		ballAnchor.onTargetLost = () => {
 			ballAudio.pause();
 		}
+		
 		
 		const carAnchor = mindarThree.addAnchor(2);
 		carAnchor.group.add(car.scene);
@@ -85,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		carAudio.setRefDistance(100);
 		carAudio.setBuffer(carAclip);
 		carAudio.setLoop(true);
-		carAnchor.group.add(carAudio);
+		carAnchor.group.add(carAudio)
 		carAnchor.onTargetFound = () => {
 			carAudio.play();
 		}
@@ -95,17 +96,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		
 		const clock = new THREE.Clock();
 		
-		await mindarThree.start();
+		
+		await mindarThree.start();		
 		
 		renderer.setAnimationLoop(() => {
 			const delta = clock.getDelta();
 			airplaneMixer.update(delta);
 			ballMixer.update(delta);
 			carMixer.update(delta);
-			car.scene.rotation.set(0, car.scene.rotaion.y + delta, 0);
+			car.scene.rotation.set(0, car.scene.rotation.y + delta, 0);
 			renderer.render(scene, camera);
 		});
 	}
 	start();
-
+	
 });
